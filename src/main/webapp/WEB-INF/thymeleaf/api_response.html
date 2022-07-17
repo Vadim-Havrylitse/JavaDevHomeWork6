@@ -1,0 +1,26 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <link rel="shortcut icon" href="/icons-java.png"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Ответ сервера</title>
+</head>
+<body>
+    <div>
+        <th:block th:object="${apiResponse}">
+            <fieldset style = "width: 500px; margin: auto;">
+                <legend>Api Response:</legend>
+                <p th:utext="'СODE: ' + ${apiResponse.code}"></p>
+                <p th:utext="'MASSAGE: ' + ${apiResponse.message}"></p>
+            </fieldset>
+            <br>
+        </th:block>
+    </div>
+    <div align="center">
+        <form action="http://localhost:8081/crud">
+            <button type="submit" >Main page</button>
+        </form>
+    </div>
+</body>

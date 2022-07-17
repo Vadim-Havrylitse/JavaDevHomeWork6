@@ -1,0 +1,72 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:text-align="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <link rel="shortcut icon" href="/icons-java.png"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Главная страница</title>
+</head>
+<body>
+<h2></h2>
+    <fieldset style = "width: 500px; margin: auto;">
+        <legend><h4>Чтобы выполнить CRUD оперицию выберите нужный пункт и нажмите Send</h4></legend>
+        <form method="GET">
+            <table align="center" border="0" cellpadding="10">
+                <tr>
+                    <th></th>
+                    <th>CREATE</th>
+                    <th>READ</th>
+                    <th>DELETE</th>
+                    <th>UPDATE</th>
+                </tr>
+                <th:block th:each="element, state:${tablesList}">
+                    <tr>
+                        <td th:utext="${element.toUpperCase()}"></td>
+                        <td><input th:id="${state.index}" type="radio" th:value="'create%' + ${element.toLowerCase()}" name="select"></td>
+                        <td><input th:id="${state.index}" type="radio" th:value="'read%' + ${element.toLowerCase()}" name="select"></td>
+                        <td><input th:id="${state.index}" type="radio" th:value="'delete%' + ${element.toLowerCase()}" name="select"></td>
+                        <td><input th:id="${state.index}" type="radio" th:value="'update%' + ${element.toLowerCase()}" name="select"></td>
+                    </tr>
+                </th:block>
+            </table>
+            <br>
+            <p align="center"><button type="submit">SEND</button>
+            </p>`
+        </form>
+    </fieldset>
+    <div align="center">
+        <fieldset style = "width: 600px; margin: auto;">
+            <legend><h4>Чтобы выполнить нужный запрос выберите и нажмите Enter</h4></legend>
+            <form method="post" action="http://localhost:8081/util_query">
+                <button type="submit">Enter</button>
+                Зарплата всех разработчиков отдельного проекта:
+                <input type="number" name="sumDev" required="required">
+                <br>
+            </form>
+            <form method="post" action="http://localhost:8081/util_query">
+                <button type="submit">Enter</button>
+                Список разработчиков отдельного проекта:
+                <input type="number" name="projectDev" required="required">
+                <br>
+            </form>
+            <form method="post" action="http://localhost:8081/util_query?action=javaDev">
+                <button type="submit">Enter</button>
+                Список всех Java разработчиков
+                <br>
+            </form>
+            <form method="post" action="http://localhost:8081/util_query?action=middleDev">
+                <button type="submit">Enter</button>
+                Список всех middle разработчиков
+                <br>
+            </form>
+            <form method="post" action="http://localhost:8081/util_query?action=projectFormat">
+                <button type="submit">Enter</button>
+                Список проектов в специальном формате
+                <br>
+            </form>
+        </fieldset>
+    </div>
+</body>
+</html>

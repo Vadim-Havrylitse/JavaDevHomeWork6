@@ -1,0 +1,54 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <link rel="shortcut icon" href="/icons-java.png"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Изменение проекта</title>
+</head>
+<body>
+<h1>Введите данные в поля, которые хотите изменить:</h1>
+<br>
+<div>
+    <form method="post">
+        *ID проекта:
+        <br>
+        <input type="text" name="id" required="required" pattern="\S+">*
+        <br>
+        Название:
+        <br>
+        <input type="text" name="name">
+        <br>
+        Бюджет:
+        <br>
+        <input type="number" name="budget">
+        <br>
+        Дата релиза:
+        <br>
+        <input type="date" name="releaseDate">
+        <br>
+        Компания—владелец проекта:
+        <br>
+        <select name="companyId">
+            <option value=""></option>
+            <th:block th:each="company:${companiesList}">
+                <option th:value="${company.id}" th:label="${company.name}"></option>
+            </th:block>
+        </select>
+        <br>
+        Заказчик проекта:
+        <br>
+        <select name="customerId">
+            <option value=""></option>
+            <th:block th:each="customer:${customersList}">
+                <option th:value="${customer.id}" th:label="${customer.name} + ' ' + ${customer.surname}"></option>
+            </th:block>
+        </select>
+        <br>
+        <br>
+        <button type="submit">SEND</button>
+    </form>
+</div>
+</body>
+</html>

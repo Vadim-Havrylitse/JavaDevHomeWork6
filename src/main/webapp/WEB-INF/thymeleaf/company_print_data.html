@@ -1,0 +1,29 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <link rel="shortcut icon" href="/icons-java.png"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Таблица компаний</title>
+</head>
+<body>
+<h1 align="center">Результат работы сервера:</h1>
+<br>
+<table align="center" border="5" frame="border" cellpadding="10">
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>COUNTRY</th>
+        <th>CITY</th>
+    </tr>
+    <th:block th:each="company, state:${companiesList}">
+        <tr>
+            <td th:text="${company.id}"></td>
+            <td th:text="${company.name}"></td>
+            <td th:text="${company.country}"></td>
+            <td th:text="${company.city}"></td>
+        </tr>
+    </th:block>
+</table>
+</body>

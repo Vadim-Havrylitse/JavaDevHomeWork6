@@ -1,0 +1,28 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <link rel="shortcut icon" href="/icons-java.png"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Добавление клиента</title>
+</head>
+<body>
+<h1>Для добавления нового клиента заполните поля:</h1>
+<br>
+<div>
+    <form method="post">
+        Имя:
+        <br>
+        <input type="text" name="name" required="required" pattern="\S+">
+        <br>
+        Фамилии:
+        <br>
+        <input type="text" name="surname" required="required" pattern="\S+">
+        <br>
+        <br>
+        <button type="submit">SEND</button>
+    </form>
+</div>
+</body>
+</html>

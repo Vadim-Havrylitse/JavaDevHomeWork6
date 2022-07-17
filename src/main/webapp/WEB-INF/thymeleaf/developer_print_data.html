@@ -1,0 +1,48 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <link rel="shortcut icon" href="/icons-java.png"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Таблица разработчиков</title>
+</head>
+<body>
+    <h1 align="center">Результат работы сервера:</h1>
+    <br>
+    <table align="center" border="5" frame="border" cellpadding="10">
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>SURNAME</th>
+            <th>AGE</th>
+            <th>SEX</th>
+            <th>SKILLS</th>
+            <th>COMPANY</th>
+            <th>SALARY</th>
+            <th>PROJECTS</th>
+        </tr>
+        <th:block th:each="developer, state:${developersList}">
+            <tr>
+                <td th:text="${developer.id}"></td>
+                <td th:text="${developer.name}"></td>
+                <td th:text="${developer.surname}"></td>
+                <td th:text="${developer.age}"></td>
+                <td th:text="${developer.sex}"></td>
+                <td>
+                    <th:block th:each="skill:${developer.skillsList}">
+                        <p th:text="${skill.industry} + ' ' + ${skill.degree}"></p>
+                    </th:block>
+                </td>
+                <td th:text="${developer.company.id} + ' | ' + ${developer.company.name}"></td>
+                <td th:text="${developer.salary}"></td>
+                <td>
+                    <th:block th:each="project:${developer.projectsList}">
+                        <p th:text="${project.id} + ' | ' + ${project.name}"></p>
+                    </th:block>
+                </td>
+
+            </tr>
+        </th:block>
+    </table>
+</body>

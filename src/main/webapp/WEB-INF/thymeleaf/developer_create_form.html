@@ -1,0 +1,69 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <link rel="shortcut icon" href="/icons-java.png"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Добавление девопса</title>
+</head>
+<body>
+    <h1>Для добавления нового разработчика заполните поля:</h1>
+    <br>
+    <div>
+        <form method="post">
+            Имя:
+            <br>
+            <input type="text" name="name" required="required" pattern="\S+">
+            <br>
+            Фамилия:
+            <br>
+            <input type="text" name="surname" required="required" pattern="\S+">
+            <br>
+            Возраст:
+            <br>
+            <input type="number" min="1" max="100" name="age" required="required" pattern="\S+">
+            <br>
+            Пол:
+            <br>
+            <select name="sex" required="required">
+                <option value=""></option>
+                <option value="male">MALE</option>
+                <option value="female">FEMALE</option>
+                <option value="other">OTHER</option>
+            </select>
+            <br>
+            Скилы:
+            <br>
+            <select name="skillsList" multiple="multiple" required="required">
+                <th:block th:each="skill:${skillsList}">
+                <option th:value="${skill.id}" th:label="${skill.industry} + ' ' + ${skill.degree}"></option>
+                </th:block>
+            </select>
+            <br>
+            Компания, в которой работает:
+            <br>
+            <select name="companyId" required="required">
+                <option value=""></option>
+                <th:block th:each="company:${companiesList}">
+                <option th:value="${company.id}" th:label="${company.name}"></option>
+                </th:block>
+            </select>
+            <br>
+            Зарплата:
+            <br>
+            <input type="number" name="salary" required="required" pattern="\S+">
+            <br>
+            Проекты, в которых задействован:
+            <br>
+            <select name="projectsList" multiple="multiple" required="required">
+                <th:block th:each="project:${projectsList}">
+                <option th:value="${project.id}" th:label="${project.name}"></option>
+                </th:block>
+            </select>
+            <br>
+            <button type="submit">SEND</button>
+        </form>
+    </div>
+</body>
+</html>
