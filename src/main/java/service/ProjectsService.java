@@ -1,7 +1,6 @@
-package dto.factory;
+package service;
 
 import dto.model.*;
-import dto.service.DtoService;
 import util.ApiResponse;
 
 import javax.servlet.http.HttpServletResponse;
@@ -70,20 +69,20 @@ public class ProjectsService extends DtoFactory<ProjectsDto, ProjectsOutputDto>{
     @Override
     public ProjectsOutputDto read(Long index) {
         try {
-            DtoService dtoService = new DtoService();
+            DtoParsingService dtoParsingService = new DtoParsingService();
 
             getProject.setLong(1, index);
             ResultSet resultSet = getProject.executeQuery();
-            ProjectsOutputDto projects = dtoService.convertResulSetToDto(resultSet, ProjectsOutputDto.class);
+            ProjectsOutputDto projects = dtoParsingService.convertResulSetToDto(resultSet, ProjectsOutputDto.class);
 
             getCompany.setLong(1, resultSet.getLong("companies_id"));
             ResultSet resultSet1 = getCompany.executeQuery();
-            CompaniesOutputDto company = dtoService.convertResulSetToDto(resultSet1, CompaniesOutputDto.class);
+            CompaniesOutputDto company = dtoParsingService.convertResulSetToDto(resultSet1, CompaniesOutputDto.class);
             projects.setCompany(company);
 
             getCustomer.setLong(1, resultSet.getLong("customers_id"));
             ResultSet resultSet2 = getCustomer.executeQuery();
-            CustomersOutputDto customer= dtoService.convertResulSetToDto(resultSet2, CustomersOutputDto.class);
+            CustomersOutputDto customer= dtoParsingService.convertResulSetToDto(resultSet2, CustomersOutputDto.class);
             projects.setCustomer(customer);
 
             return projects;

@@ -1,4 +1,4 @@
-package dto;
+package util;
 
 public enum ApiEntity {
     DEVELOPERS,

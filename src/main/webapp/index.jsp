@@ -11,7 +11,7 @@
         <h1>Hello, dude. This is home work #6</h1>
         <br>
         <br>
-        <form method="GET" action="http://localhost:8081/crud" name="start_page">
+        <form method="GET" action="/crud" name="start_page">
             <button type="submit">LET`S START THIS WEB APP</button>
         </form>
     </div>

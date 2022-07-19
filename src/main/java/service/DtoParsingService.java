@@ -1,4 +1,4 @@
-package dto.service;
+package service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @NoArgsConstructor
-public class DtoService {
+public class DtoParsingService {
 
     @SneakyThrows
     public <T> T convertResulSetToDto(ResultSet resultSet, Class<T> className){
@@ -128,5 +128,4 @@ public class DtoService {
         }
         return result;
     }
-
 }

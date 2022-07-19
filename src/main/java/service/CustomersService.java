@@ -1,8 +1,7 @@
-package dto.factory;
+package service;
 
 import dto.model.CustomersDto;
 import dto.model.CustomersOutputDto;
-import dto.service.DtoService;
 import util.ApiResponse;
 
 import javax.servlet.http.HttpServletResponse;
@@ -62,11 +61,11 @@ public class CustomersService extends DtoFactory<CustomersDto, CustomersOutputDt
     @Override
     public CustomersOutputDto read(Long index) {
         try {
-            DtoService dtoService = new DtoService();
+            DtoParsingService dtoParsingService = new DtoParsingService();
 
             getCustomer.setLong(1, index);
             ResultSet resultSet = getCustomer.executeQuery();
-            return dtoService.convertResulSetToDto(resultSet, CustomersOutputDto.class);
+            return dtoParsingService.convertResulSetToDto(resultSet, CustomersOutputDto.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

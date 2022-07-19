@@ -18,23 +18,23 @@ import java.util.List;
 @WebServlet("/util_query")
 public class UtilQueryServlet extends HttpServlet {
 
-    private static final UserViewBrowser browser;
-    private static final DataBaseService database;
-    private static final String queryForSumSalaryInSomeProject;
-    private static final String queryForListAllDevInSomeProject;
-    private static final String queryForListAllJavaDev;
-    private static final String queryForListAllMiddleDev;
-    private static final String queryForListAllProjectWithSpecFormat;
+    private static final UserViewBrowser BROWSER_VIEW;
+    private static final DataBaseService DATA_BASE_SERVICE;
+    private static final String QUERY_FOR_SUM_SALARY_IN_SOME_PROJECT;
+    private static final String QUERY_FOR_LIST_ALL_DEV_IN_SOME_PROJECT;
+    private static final String QUERY_FOR_LIST_ALL_JAVA_DEV;
+    private static final String QUERY_FOR_LIST_ALL_MIDDLE_DEV;
+    private static final String QUERY_FOR_LIST_ALL_PROJECT_WITH_SPEC_FORMAT;
 
     static {
-        browser = UserViewBrowser.of();
-        database = DataBaseService.of();
-        queryForListAllProjectWithSpecFormat = "SELECT projects.release_date, projects.name, COUNT(developers_id) " +
+        BROWSER_VIEW = UserViewBrowser.of();
+        DATA_BASE_SERVICE = DataBaseService.of();
+        QUERY_FOR_LIST_ALL_PROJECT_WITH_SPEC_FORMAT = "SELECT projects.release_date, projects.name, COUNT(developers_id) " +
             "FROM projects " +
             "LEFT JOIN developers_projects " +
             "ON developers_id = id " +
             "GROUP BY projects.id;";
-        queryForListAllMiddleDev = "SELECT developers.*" +
+        QUERY_FOR_LIST_ALL_MIDDLE_DEV = "SELECT developers.*" +
                 "FROM developers " +
                 "LEFT JOIN developers_skills " +
                 "ON developers_id = developers.id " +
@@ -43,7 +43,7 @@ public class UtilQueryServlet extends HttpServlet {
                 "WHERE skills.degree = 'Middle' " +
                 "GROUP BY developers.id " +
                 "ORDER BY developers.id;";
-        queryForListAllJavaDev = "SELECT developers.*" +
+        QUERY_FOR_LIST_ALL_JAVA_DEV = "SELECT developers.*" +
                 "FROM developers " +
                 "LEFT JOIN developers_skills " +
                 "ON developers_id = developers.id " +
@@ -52,12 +52,12 @@ public class UtilQueryServlet extends HttpServlet {
                 "WHERE skills.industry = 'Java' " +
                 "GROUP BY developers.id " +
                 "ORDER BY developers.id;";
-        queryForListAllDevInSomeProject = "SELECT developers.* " +
+        QUERY_FOR_LIST_ALL_DEV_IN_SOME_PROJECT = "SELECT developers.* " +
                 "FROM developers_projects " +
                 "LEFT JOIN developers " +
                 "ON developers_id = id " +
                 "WHERE projects_id = %s;";
-        queryForSumSalaryInSomeProject = "SELECT projects.name, SUM(salary) " +
+        QUERY_FOR_SUM_SALARY_IN_SOME_PROJECT = "SELECT projects.name, SUM(salary) " +
                 "FROM projects " +
                 "LEFT JOIN developers_projects " +
                 "ON id = projects_id " +
@@ -70,46 +70,46 @@ public class UtilQueryServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if(req.getParameter("sumDev") != null){
-            String sqlQuery = String.format(queryForSumSalaryInSomeProject, req.getParameter("sumDev"));
+            String sqlQuery = String.format(QUERY_FOR_SUM_SALARY_IN_SOME_PROJECT, req.getParameter("sumDev"));
             printTableResult(req,resp,sqlQuery);
             return;
         }
         if (req.getParameter("projectDev") != null){
-            String sqlQuery = String.format(queryForListAllDevInSomeProject, req.getParameter("projectDev"));
+            String sqlQuery = String.format(QUERY_FOR_LIST_ALL_DEV_IN_SOME_PROJECT, req.getParameter("projectDev"));
             printTableResult(req, resp, sqlQuery);
             return;
         }
         if(req.getParameter("action") != null){
             switch (req.getParameter("action")){
                 case "javaDev":
-                    printTableResult(req, resp, queryForListAllJavaDev);
+                    printTableResult(req, resp, QUERY_FOR_LIST_ALL_JAVA_DEV);
                     break;
                 case "middleDev":
-                    printTableResult(req, resp, queryForListAllMiddleDev);
+                    printTableResult(req, resp, QUERY_FOR_LIST_ALL_MIDDLE_DEV);
                     break;
                 case "projectFormat":
-                    printTableResult(req, resp, queryForListAllProjectWithSpecFormat);
+                    printTableResult(req, resp, QUERY_FOR_LIST_ALL_PROJECT_WITH_SPEC_FORMAT);
                     break;
             }
             return;
         }
-        browser.sendRedirect(resp, "сrud");
+        BROWSER_VIEW.sendRedirect(resp, "сrud");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        browser.sendRedirectOnPage(req, resp, "util_query", new Context());
+        BROWSER_VIEW.sendRedirectOnPage(req, resp, "util_query", new Context());
     }
 
     private void printTableResult(HttpServletRequest req, HttpServletResponse resp, String sqlQuery){
         try {
-            ResultSet resultSet = database.readData(sqlQuery);
+            ResultSet resultSet = DATA_BASE_SERVICE.readData(sqlQuery);
             List<String> labelList = getLabels(resultSet);
             List<List<String>> valuesList = getValues(resultSet);
             Context context = new Context();
             context.setVariable("labelList", labelList);
             context.setVariable("valuesList", valuesList);
-            browser.sendRedirectOnPage(req, resp, "util_query_print", context);
+            BROWSER_VIEW.sendRedirectOnPage(req, resp, "util_query_print", context);
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }

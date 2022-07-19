@@ -1,13 +1,11 @@
 package controler.crud;
 
-import dto.ApiEntity;
-import dto.factory.DtoFactory;
 import dto.model.CustomersDto;
-import dto.service.DtoService;
 import org.thymeleaf.context.Context;
+import service.DtoFactory;
+import util.ApiEntity;
 import util.ApiResponse;
 import util.FormType;
-import util.PropertiesLoader;
 import view.UserViewBrowser;
 
 import javax.servlet.annotation.WebServlet;
@@ -21,40 +19,38 @@ import java.io.IOException;
         "/crud/delete/customers",
         "/crud/update/customers"})
 public class CustomersServlet extends HttpServlet {
-    private static final UserViewBrowser browser = UserViewBrowser.of();
-    private static final DtoFactory factory = DtoFactory.init(ApiEntity.CUSTOMERS);
-    private static final DtoService dtoService = new DtoService();
+    private static final UserViewBrowser BROWSER_VIEW = UserViewBrowser.of();
+    private static final DtoFactory SERVICE = DtoFactory.init(ApiEntity.CUSTOMERS);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String action = req.getRequestURI().substring(6).split("/")[0];
-        switch (action){
-            case "create":
-                sendInputForm(req, resp, FormType.CREATE);
-                break;
-            case "read":
-                printCustomers(req, resp);
-                break;
-            case "delete":
-                if (req.getParameter("id") != null){
-                    ApiResponse apiResponse = factory.delete(Long.valueOf(req.getParameter("id")));
-                    Context context = new Context();
-                    context.setVariable("apiResponse", apiResponse);
-                    browser.sendRedirectOnPage(req,resp,"api_response", context);
-                    return;
-                }
-                sendInputForm(req, resp, FormType.DELETE);
-                break;
-            case "update":
-                sendInputForm(req, resp, FormType.UPDATE);
+        String url = req.getRequestURI();
+        if (url.contains("create")) {
+            sendInputForm(req, resp, FormType.CREATE);
+        }
+        if (url.contains("read")) {
+            printCustomers(req, resp);
+        }
+        if (url.contains("delete")) {
+            if (req.getParameter("id") != null){
+                ApiResponse apiResponse = SERVICE.delete(Long.valueOf(req.getParameter("id")));
+                Context context = new Context();
+                context.setVariable("apiResponse", apiResponse);
+                BROWSER_VIEW.sendRedirectOnPage(req,resp,"api_response", context);
+                return;
+            }
+            sendInputForm(req, resp, FormType.DELETE);
+        }
+        if (url.contains("update")) {
+            sendInputForm(req,resp, FormType.UPDATE);
         }
     }
 
     private void printCustomers(HttpServletRequest req, HttpServletResponse resp) {
         Context context = new Context();
-        context.setVariable("customersList", factory.readAll());
+        context.setVariable("customersList", SERVICE.readAll());
         try {
-            browser.sendRedirectOnPage(req, resp, "customer_print_data", context);
+            BROWSER_VIEW.sendRedirectOnPage(req, resp, "customer_print_data", context);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,7 +69,7 @@ public class CustomersServlet extends HttpServlet {
                     nameHtmlFile = "customer_update_form";
             }
         try {
-            browser.sendRedirectOnPage(req, resp, nameHtmlFile, new Context());
+            BROWSER_VIEW.sendRedirectOnPage(req, resp, nameHtmlFile, new Context());
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -81,26 +77,21 @@ public class CustomersServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String action = req.getRequestURI().substring(6).split("/")[0];
         Context context = new Context();
-        ApiResponse apiResponse;
-        switch (action){
-            case "create":
-                CustomersDto customer = dtoService.parseRequestToDto(req, CustomersDto.class);
-                apiResponse = factory.save(customer);
-                break;
-            case "delete":
-                apiResponse = factory.delete(Long.valueOf(req.getParameter("id")));
-                break;
-            case "update":
-                apiResponse = factory.update(Long.valueOf(req.getParameter("id")),
-                        dtoService.parseRequestToDto(req, CustomersDto.class));
-                break;
-            default:
-                resp.sendRedirect(PropertiesLoader.getProperty("crud"));
-                return;
+        ApiResponse apiResponse = null;
+        String url = req.getRequestURI();
+        if (url.contains("create")) {
+            CustomersDto customer = SERVICE.parseRequestToDto(req, CustomersDto.class);
+            apiResponse = SERVICE.save(customer);
+        }
+        if (url.contains("delete")) {
+            apiResponse = SERVICE.delete(Long.valueOf(req.getParameter("id")));
+        }
+        if (url.contains("update")) {
+            apiResponse = SERVICE.update(Long.valueOf(req.getParameter("id")),
+                    SERVICE.parseRequestToDto(req, CustomersDto.class));
         }
         context.setVariable("apiResponse", apiResponse);
-        browser.sendRedirectOnPage(req,resp,"api_response", context);
+        BROWSER_VIEW.sendRedirectOnPage(req,resp,"api_response", context);
     }
 }

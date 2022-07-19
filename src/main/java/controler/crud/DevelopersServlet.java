@@ -1,16 +1,14 @@
 package controler.crud;
 
-import dto.ApiEntity;
-import dto.factory.DtoFactory;
 import dto.model.CompaniesDto;
 import dto.model.DevelopersDto;
 import dto.model.ProjectsDto;
 import dto.model.SkillsDto;
-import dto.service.DtoService;
 import org.thymeleaf.context.Context;
+import service.DtoFactory;
+import util.ApiEntity;
 import util.ApiResponse;
 import util.FormType;
-import util.PropertiesLoader;
 import view.UserViewBrowser;
 
 import javax.servlet.ServletException;
@@ -27,40 +25,38 @@ import java.util.List;
         "/crud/delete/developers",
         "/crud/update/developers"})
 public class DevelopersServlet extends HttpServlet {
-    private static final UserViewBrowser browser = UserViewBrowser.of();
-    private static final DtoFactory factory = DtoFactory.init(ApiEntity.DEVELOPERS);
-    private static final DtoService dtoService = new DtoService();
+    private static final UserViewBrowser BROWSER_VIEW = UserViewBrowser.of();
+    private static final DtoFactory SERVICE = DtoFactory.init(ApiEntity.DEVELOPERS);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String action = req.getRequestURI().substring(6).split("/")[0];
-        switch (action){
-            case "create":
-                sendInputForm(req, resp, FormType.CREATE);
-                break;
-            case "read":
-                printDevelopers(req, resp);
-                break;
-            case "delete":
-                if (req.getParameter("id") != null){
-                    ApiResponse apiResponse = factory.delete(Long.valueOf(req.getParameter("id")));
-                    Context context = new Context();
-                    context.setVariable("apiResponse", apiResponse);
-                    browser.sendRedirectOnPage(req,resp,"api_response", context);
-                    return;
-                }
-                sendInputForm(req, resp, FormType.DELETE);
-                break;
-            case "update":
-                sendInputForm(req, resp, FormType.UPDATE);
+        String url = req.getRequestURI();
+        if (url.contains("create")) {
+            sendInputForm(req, resp, FormType.CREATE);
+        }
+        if (url.contains("read")) {
+            printDevelopers(req, resp);
+        }
+        if (url.contains("delete")) {
+            if (req.getParameter("id") != null){
+                ApiResponse apiResponse = SERVICE.delete(Long.valueOf(req.getParameter("id")));
+                Context context = new Context();
+                context.setVariable("apiResponse", apiResponse);
+                BROWSER_VIEW.sendRedirectOnPage(req,resp,"api_response", context);
+                return;
+            }
+            sendInputForm(req, resp, FormType.DELETE);
+        }
+        if (url.contains("update")) {
+            sendInputForm(req,resp, FormType.UPDATE);
         }
     }
 
     private void printDevelopers(HttpServletRequest req, HttpServletResponse resp) {
         Context context = new Context();
-        context.setVariable("developersList", factory.readAll());
+        context.setVariable("developersList", SERVICE.readAll());
         try {
-            browser.sendRedirectOnPage(req, resp, "developer_print_data", context);
+            BROWSER_VIEW.sendRedirectOnPage(req, resp, "developer_print_data", context);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,27 +65,27 @@ public class DevelopersServlet extends HttpServlet {
     private void sendInputForm(HttpServletRequest req, HttpServletResponse resp, FormType type) {
         try {
             if(type.equals(FormType.DELETE)) {
-                browser.sendRedirectOnPage(req, resp, "delete_id_input", new Context());
+                BROWSER_VIEW.sendRedirectOnPage(req, resp, "delete_id_input", new Context());
                 return;
             }
-            List<ProjectsDto> projectsList = dtoService.convertResulSetToDtoList(
-                     factory.executeAnyReadQuery("SELECT * FROM projects;"),
+            List<ProjectsDto> projectsList = SERVICE.convertResulSetToDtoList(
+                     SERVICE.executeAnyReadQuery("SELECT * FROM projects;"),
                      ProjectsDto.class);
-            List<CompaniesDto> companiesList = dtoService.convertResulSetToDtoList(
-                    factory.executeAnyReadQuery("SELECT * FROM companies;"),
+            List<CompaniesDto> companiesList = SERVICE.convertResulSetToDtoList(
+                    SERVICE.executeAnyReadQuery("SELECT * FROM companies;"),
                     CompaniesDto.class);
-            List<SkillsDto> skillsList = dtoService.convertResulSetToDtoList(
-                     factory.executeAnyReadQuery("SELECT * FROM skills;"),
+            List<SkillsDto> skillsList = SERVICE.convertResulSetToDtoList(
+                     SERVICE.executeAnyReadQuery("SELECT * FROM skills;"),
                  SkillsDto.class);
             Context context = new Context();
             context.setVariable("companiesList", companiesList);
             context.setVariable("projectsList", projectsList);
             context.setVariable("skillsList", skillsList);
             if (type.equals(FormType.CREATE)){
-                browser.sendRedirectOnPage(req, resp, "developer_create_form", context);
+                BROWSER_VIEW.sendRedirectOnPage(req, resp, "developer_create_form", context);
             }
             if (type.equals(FormType.UPDATE)){
-                browser.sendRedirectOnPage(req, resp, "developer_update_form", context);
+                BROWSER_VIEW.sendRedirectOnPage(req, resp, "developer_update_form", context);
             }
          } catch (IOException | SQLException e){
             e.printStackTrace();
@@ -98,26 +94,21 @@ public class DevelopersServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String action = req.getRequestURI().substring(6).split("/")[0];
         Context context = new Context();
-        ApiResponse apiResponse;
-        switch (action){
-            case "create":
-                DevelopersDto dev = dtoService.parseRequestToDto(req, DevelopersDto.class);
-                apiResponse = factory.save(dev);
-                break;
-            case "delete":
-                apiResponse = factory.delete(Long.valueOf(req.getParameter("id")));
-                break;
-            case "update":
-                apiResponse = factory.update(Long.valueOf(req.getParameter("id")),
-                        dtoService.parseRequestToDto(req, DevelopersDto.class));
-                break;
-            default:
-                resp.sendRedirect(PropertiesLoader.getProperty("crud"));
-                return;
+        ApiResponse apiResponse = null;
+        String url = req.getRequestURI();
+        if (url.contains("create")) {
+            DevelopersDto dev = SERVICE.parseRequestToDto(req, DevelopersDto.class);
+            apiResponse = SERVICE.save(dev);
+        }
+        if (url.contains("delete")) {
+            apiResponse = SERVICE.delete(Long.valueOf(req.getParameter("id")));
+        }
+        if (url.contains("update")) {
+            apiResponse = SERVICE.update(Long.valueOf(req.getParameter("id")),
+                    SERVICE.parseRequestToDto(req, DevelopersDto.class));
         }
         context.setVariable("apiResponse", apiResponse);
-        browser.sendRedirectOnPage(req,resp,"api_response", context);
+        BROWSER_VIEW.sendRedirectOnPage(req,resp,"api_response", context);
     }
 }

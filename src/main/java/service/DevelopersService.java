@@ -1,8 +1,7 @@
-package dto.factory;
+package service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dto.model.*;
-import dto.service.DtoService;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import util.ApiResponse;
@@ -97,25 +96,25 @@ public class DevelopersService extends DtoFactory<DevelopersDto, DevelopersOutpu
     @Override
     public DevelopersOutputDto read(Long index) {
         try {
-            DtoService dtoService = new DtoService();
+            DtoParsingService dtoParsingService = new DtoParsingService();
 
             getDeveloper.setLong(1, index);
             ResultSet resultSet = getDeveloper.executeQuery();
-            DevelopersOutputDto developer = dtoService.convertResulSetToDto(resultSet, DevelopersOutputDto.class);
+            DevelopersOutputDto developer = dtoParsingService.convertResulSetToDto(resultSet, DevelopersOutputDto.class);
 
             getProjectFromDevId.setLong(1, index);
             ResultSet resultSet1 = getProjectFromDevId.executeQuery();
-            List<ProjectsOutputDto> projects = dtoService.convertResulSetToDtoList(resultSet1, ProjectsOutputDto.class);
+            List<ProjectsOutputDto> projects = dtoParsingService.convertResulSetToDtoList(resultSet1, ProjectsOutputDto.class);
             developer.setProjectsList(projects);
 
             getSkillFromDevId.setLong(1, index);
             ResultSet resultSet2 = getSkillFromDevId.executeQuery();
-            List<SkillsOutputDto> skills = dtoService.convertResulSetToDtoList(resultSet2, SkillsOutputDto.class);
+            List<SkillsOutputDto> skills = dtoParsingService.convertResulSetToDtoList(resultSet2, SkillsOutputDto.class);
             developer.setSkillsList(skills);
 
             getCompany.setLong(1, resultSet.getLong("companies_id"));
             ResultSet resultSet3 = getCompany.executeQuery();
-            CompaniesOutputDto companies = dtoService.convertResulSetToDto(resultSet3, CompaniesOutputDto.class);
+            CompaniesOutputDto companies = dtoParsingService.convertResulSetToDto(resultSet3, CompaniesOutputDto.class);
             developer.setCompany(companies);
 
             return developer;

@@ -22,7 +22,7 @@ public class CrudFilter implements Filter {
         }else {
             String[] split = parameter.split("%");
             HttpServletResponse response = (HttpServletResponse) servletResponse;
-            response.sendRedirect("http://localhost:8081/crud/"
+            response.sendRedirect("/crud/"
                     + split[0]
                     + "/"
                     + split[1]);

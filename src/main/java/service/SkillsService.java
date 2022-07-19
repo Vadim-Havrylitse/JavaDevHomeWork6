@@ -1,8 +1,7 @@
-package dto.factory;
+package service;
 
 import dto.model.SkillsDto;
 import dto.model.SkillsOutputDto;
-import dto.service.DtoService;
 import util.ApiResponse;
 
 import javax.servlet.http.HttpServletResponse;
@@ -62,10 +61,10 @@ public class SkillsService extends DtoFactory<SkillsDto, SkillsOutputDto> {
     @Override
     public SkillsOutputDto read(Long index) {
         try {
-            DtoService dtoService = new DtoService();
+            DtoParsingService dtoParsingService = new DtoParsingService();
             getSkill.setLong(1, index);
             ResultSet resultSet = getSkill.executeQuery();
-            return dtoService.convertResulSetToDto(resultSet, SkillsOutputDto.class);
+            return dtoParsingService.convertResulSetToDto(resultSet, SkillsOutputDto.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

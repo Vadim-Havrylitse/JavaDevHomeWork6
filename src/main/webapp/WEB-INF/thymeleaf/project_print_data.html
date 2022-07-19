@@ -8,26 +8,32 @@
     <title>Таблица проектов</title>
 </head>
 <body>
-<h1 align="center">Результат работы сервера:</h1>
-<br>
-<table align="center" border="5" frame="border" cellpadding="10">
-    <tr>
-        <th>ID</th>
-        <th>NAME</th>
-        <th>BUDGET</th>
-        <th>RELEASE DATE</th>
-        <th>COMPANY</th>
-        <th>CUSTOMER</th>
-    </tr>
-    <th:block th:each="project, state:${projectsList}">
+    <h1 align="center">Результат работы сервера:</h1>
+    <br>
+    <table align="center" border="5" frame="border" cellpadding="10">
         <tr>
-            <td th:text="${project.id}"></td>
-            <td th:text="${project.name}"></td>
-            <td th:text="${project.budget}"></td>
-            <td th:text="${project.releaseDate}"></td>
-            <td th:text="${project.company.id} + ' | ' + ${project.company.name}"></td>
-            <td th:text="${project.customer.name} + ' ' + ${project.customer.surname}"></td>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>BUDGET</th>
+            <th>RELEASE DATE</th>
+            <th>COMPANY</th>
+            <th>CUSTOMER</th>
         </tr>
-    </th:block>
-</table>
+        <th:block th:each="project, state:${projectsList}">
+            <tr>
+                <td th:text="${project.id}"></td>
+                <td th:text="${project.name}"></td>
+                <td th:text="${project.budget}"></td>
+                <td th:text="${project.releaseDate}"></td>
+                <td th:text="${project.company.id} + ' | ' + ${project.company.name}"></td>
+                <td th:text="${project.customer.name} + ' ' + ${project.customer.surname}"></td>
+            </tr>
+        </th:block>
+    </table>
+    <br>
+    <div align="center">
+        <form action="/crud">
+            <button type="submit" >Main page</button>
+        </form>
+    </div>
 </body>

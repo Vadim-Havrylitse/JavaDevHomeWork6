@@ -39,29 +39,29 @@
     <div align="center">
         <fieldset style = "width: 600px; margin: auto;">
             <legend><h4>Чтобы выполнить нужный запрос выберите и нажмите Enter</h4></legend>
-            <form method="post" action="http://localhost:8081/util_query">
+            <form method="post" action="/util_query">
                 <button type="submit">Enter</button>
                 Зарплата всех разработчиков отдельного проекта:
                 <input type="number" name="sumDev" required="required">
                 <br>
             </form>
-            <form method="post" action="http://localhost:8081/util_query">
+            <form method="post" action="/util_query">
                 <button type="submit">Enter</button>
                 Список разработчиков отдельного проекта:
                 <input type="number" name="projectDev" required="required">
                 <br>
             </form>
-            <form method="post" action="http://localhost:8081/util_query?action=javaDev">
+            <form method="post" action="/util_query?action=javaDev">
                 <button type="submit">Enter</button>
                 Список всех Java разработчиков
                 <br>
             </form>
-            <form method="post" action="http://localhost:8081/util_query?action=middleDev">
+            <form method="post" action="/util_query?action=middleDev">
                 <button type="submit">Enter</button>
                 Список всех middle разработчиков
                 <br>
             </form>
-            <form method="post" action="http://localhost:8081/util_query?action=projectFormat">
+            <form method="post" action="/util_query?action=projectFormat">
                 <button type="submit">Enter</button>
                 Список проектов в специальном формате
                 <br>

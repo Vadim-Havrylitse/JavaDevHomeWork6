@@ -8,20 +8,26 @@
     <title>Таблица компаний</title>
 </head>
 <body>
-<h1 align="center">Результат работы сервера:</h1>
-<br>
-<table align="center" border="5" frame="border" cellpadding="10">
-    <tr>
-        <th:block th:each="label:${labelList}">
-            <th th:text="${label.toUpperCase()}"></th>
-        </th:block>
-    </tr>
-    <th:block th:each="set, state:${valuesList}">
+    <h1 align="center">Результат работы сервера:</h1>
+    <br>
+    <table align="center" border="5" frame="border" cellpadding="10">
         <tr>
-            <th:block th:each="value: ${set}">
-            <td th:text="${value}"></td>
+            <th:block th:each="label:${labelList}">
+                <th th:text="${label.toUpperCase()}"></th>
             </th:block>
         </tr>
-    </th:block>
-</table>
+        <th:block th:each="set, state:${valuesList}">
+            <tr>
+                <th:block th:each="value: ${set}">
+                <td th:text="${value}"></td>
+                </th:block>
+            </tr>
+        </th:block>
+    </table>
+    <br>
+    <div align="center">
+        <form action="/crud">
+            <button type="submit" >Main page</button>
+        </form>
+    </div>
 </body>

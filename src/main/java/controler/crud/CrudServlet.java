@@ -1,6 +1,6 @@
 package controler.crud;
 
-import dto.factory.DtoFactory;
+import service.DtoFactory;
 import org.thymeleaf.context.Context;
 import view.UserViewBrowser;
 
@@ -15,21 +15,21 @@ import java.util.Locale;
 
 @WebServlet(value = "/crud", name = "MainServlet")
 public class CrudServlet extends HttpServlet {
-    private static final UserViewBrowser browser;
-    private static final List<String> tablesName;
+    private static final UserViewBrowser BROWSER_VIEW;
+    private static final List<String> TABLES_NAME;
 
     static {
-        tablesName = DtoFactory.getTablesName();
-        browser = UserViewBrowser.of();
+        TABLES_NAME = DtoFactory.getTablesName();
+        BROWSER_VIEW = UserViewBrowser.of();
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String tableName = req.getParameter("table");
-        if (!tablesName.contains(tableName)) {
+        if (!TABLES_NAME.contains(tableName)) {
             Context context = new Context();
-            context.setVariable("tablesList", tablesName);
-            browser.sendRedirectOnPage(req, resp, "MAIN_PAGE", context);
+            context.setVariable("tablesList", TABLES_NAME);
+            BROWSER_VIEW.sendRedirectOnPage(req, resp, "MAIN_PAGE", context);
         } else {
             String url = "http://localhost:8081" +
                     req.getServletPath() +

@@ -8,43 +8,43 @@
     <title>Добавление проекта</title>
 </head>
 <body>
-<h1>Для добавления нового проекта заполните поля:</h1>
-<br>
-<div>
-    <form method="post">
-        Название:
-        <br>
-        <input type="text" name="name" required="required" pattern="\S+">
-        <br>
-        Бюджет:
-        <br>
-        <input type="number" name="budget" required="required" pattern="\S+">
-        <br>
-        Дата релиза:
-        <br>
-        <input type="date" name="releaseDate" required="required">
-        <br>
-        Компания—владелец проекта:
-        <br>
-        <select name="companyId" required="required">
-            <option value=""></option>
-            <th:block th:each="company:${companiesList}">
-                <option th:value="${company.id}" th:label="${company.name}"></option>
-            </th:block>
-        </select>
-        <br>
-        Заказчик проекта:
-        <br>
-        <select name="customerId" required="required">
-            <option value=""></option>
-            <th:block th:each="customer:${customersList}">
-                <option th:value="${customer.id}" th:label="${customer.name} + ' ' + ${customer.surname}"></option>
-            </th:block>
-        </select>
-        <br>
-        <br>
-        <button type="submit">SEND</button>
-    </form>
-</div>
+    <h1>Для добавления нового проекта заполните поля:</h1>
+    <br>
+    <div>
+        <form method="post">
+            Название:
+            <br>
+            <input type="text" name="name" required="required" pattern="\S+">
+            <br>
+            Бюджет:
+            <br>
+            <input type="number" name="budget" required="required" pattern="\S+">
+            <br>
+            Дата релиза:
+            <br>
+            <input type="date" name="releaseDate" required="required">
+            <br>
+            Компания—владелец проекта:
+            <br>
+            <select name="companyId" required="required">
+                <option value=""></option>
+                <th:block th:each="company:${companiesList}">
+                    <option th:value="${company.id}" th:label="${company.name}"></option>
+                </th:block>
+            </select>
+            <br>
+            Заказчик проекта:
+            <br>
+            <select name="customerId" required="required">
+                <option value=""></option>
+                <th:block th:each="customer:${customersList}">
+                    <option th:value="${customer.id}" th:label="${customer.name} + ' ' + ${customer.surname}"></option>
+                </th:block>
+            </select>
+            <br>
+            <br>
+            <button type="submit">SEND</button>
+        </form>
+    </div>
 </body>
 </html>
