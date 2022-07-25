@@ -1,4 +1,4 @@
-package controler.filter;
+package controler.crud.filter;
 
 
 import javax.servlet.*;
@@ -18,7 +18,6 @@ public class CrudFilter implements Filter {
         String parameter = servletRequest.getParameter("select");
         if(parameter == null) {
             filterChain.doFilter(servletRequest, servletResponse);
-            return;
         }else {
             String[] split = parameter.split("%");
             HttpServletResponse response = (HttpServletResponse) servletResponse;
